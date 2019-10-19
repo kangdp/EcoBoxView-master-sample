@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="EcoBoxView">
+<!--        背景圆填充色-->
+        <attr name="bgCircleColor" format="color"/>
+<!--        背景圆边框色-->
+        <attr name="bgCircleStrokeColor" format="color"/>
+<!--        背景圆边框宽度-->
+        <attr name="bgCircleStrokeWidth" format="dimension"/>
+<!--        圆弧颜色-->
+        <attr name="arcColor" format="color"/>
+<!--        圆弧间隙颜色-->
+        <attr name="arcGapColor" format="color"/>
+    </declare-styleable>
+
+</resources>
