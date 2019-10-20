@@ -11,6 +11,8 @@
         <attr name="arcColor" format="color"/>
 <!--        圆弧间隙颜色-->
         <attr name="arcGapColor" format="color"/>
+<!--        平分线宽度-->
+        <attr name="equalLineWidth" format="dimension"/>
     </declare-styleable>
 
 </resources>

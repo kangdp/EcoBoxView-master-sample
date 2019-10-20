@@ -3,12 +3,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center"
     tools:context=".MainActivity">
 
     <com.kdp.ecoboxview.EcoBoxView
         android:id="@+id/ecoBoxView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        app:bgCircleColor="#F3F3F3"
+        app:bgCircleStrokeColor="#DDDDDD"
+        app:bgCircleStrokeWidth="1dp"
+        app:arcColor="#0BD9B6"
+        app:arcGapColor="#C4EDE6"
+        app:equalLineWidth="2dp"
         />
 
 </RelativeLayout>
