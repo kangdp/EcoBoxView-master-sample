@@ -131,6 +131,10 @@ class EcoBoxView : View{
 
     private fun drawParts(canvas: Canvas?) {
         canvas?.save()
+        var left: Float
+        var top: Float
+        var right: Float
+        var bottom: Float
         for (i in 0 until data.size){
             canvas?.rotate(if (i== 0) 90f else 120f,mCenter.x,mCenter.y)
             val part = data[i]
@@ -138,29 +142,43 @@ class EcoBoxView : View{
             for (j in 0 until size.plus(1)){
                 val gapScale = part.percent.times(10)-size
                 mArcPaint.strokeWidth = mBgCircleStrokeWidth.times(2)
-                mRect.set(
-                    mBoxSize.div(2).minus(mHoleSize.div(2)).minus(j.times(mCircleGap.plus(mBgCircleStrokeWidth))),
-                    mBoxSize.div(2).minus(mHoleSize.div(2)).minus(j.times(mCircleGap.plus(mBgCircleStrokeWidth))),
-                    mBoxSize.div(2).plus(mHoleSize.div(2)).plus(j.times(mCircleGap.plus(mBgCircleStrokeWidth))),
-                    mBoxSize.div(2).plus(mHoleSize.div(2)).plus(j.times(mCircleGap.plus(mBgCircleStrokeWidth))))
-                drawArc(canvas,mArcPaint)
+                left =  mBoxSize.div(2).minus(mHoleSize.div(2)).minus(j.times(mCircleGap.plus(mBgCircleStrokeWidth)))
+                top = left
+                right = mBoxSize.div(2).plus(mHoleSize.div(2)).plus(j.times(mCircleGap.plus(mBgCircleStrokeWidth)))
+                bottom =  right
+                mRect.set(left, top, right, bottom)
                 if (j == size){
-//                    mArcPaint.strokeWidth = gapScale.times(mCircleGap).times(2)
                     mArcPaint.strokeWidth = mEqualLineWidth.times(2)
-                    mRect.left-=mBgCircleStrokeWidth
-                    mRect.top-=mBgCircleStrokeWidth
-                    mRect.right+=mBgCircleStrokeWidth
-                    mRect.bottom+=mBgCircleStrokeWidth
-                    drawArc(canvas,mArcPaint)
+                    left = mRect.left.minus(mBgCircleStrokeWidth).minus(mCircleGap.times(gapScale).minus(mEqualLineWidth))
+                    top = left
+                    right =  mRect.right.plus(mBgCircleStrokeWidth).plus(mCircleGap.times(gapScale).minus(mEqualLineWidth))
+                    bottom = right
                 }
-                    //绘制间隙
-                    val startX = mBoxSize.div(2).plus(mHoleSize.div(2f))
-                    val startY =  mBoxSize.div(2)
-                    val endX = startX.plus(mBgCircleStrokeWidth.plus(mCircleGap).times(j)).plus(mBgCircleStrokeWidth).plus(mEqualLineWidth)
-                    drawArcGap(startX,startY,endX,startY,canvas)
-                    canvas?.rotate(120f,mCenter.x,mCenter.y)
-                    drawArcGap(startX,startY,endX,startY,canvas)
-                    canvas?.rotate(-120f,mCenter.x,mCenter.y)
+                mRect.set(left, top, right, bottom)
+                drawArc(canvas,mArcPaint)
+                //绘制透明圆环
+//                if (j == 0 && j == size){
+//                    mRingPaint.strokeWidth = mCircleGap.times(gapScale)
+//                }else {
+//                    mRingPaint.strokeWidth = mCircleGap
+//                }
+
+//                mRingPaint.strokeWidth = mCircleGap
+//
+//                left = mBoxSize.div(2).minus(mHoleSize.div(2)).minus(j.times(mCircleGap.plus(mBgCircleStrokeWidth))).minus(mRingPaint.strokeWidth.div(2))
+//                top = left
+//                right = mBoxSize.div(2).plus(mHoleSize.div(2)).plus(j.times(mCircleGap.plus(mBgCircleStrokeWidth))).plus(mRingPaint.strokeWidth.div(2))
+//                bottom = right
+//                mRect.set(left, top, right, bottom)
+//                drawArc(canvas,mRingPaint)
+                //绘制间隙
+                val startX = mBoxSize.div(2).plus(mHoleSize.div(2f))
+                val startY =  mBoxSize.div(2)
+                val endX = startX.plus(mBgCircleStrokeWidth.plus(mCircleGap).times(j)).plus(mBgCircleStrokeWidth).plus(mEqualLineWidth)
+                drawArcGap(startX,startY,endX,startY,canvas)
+                canvas?.rotate(120f,mCenter.x,mCenter.y)
+                drawArcGap(startX,startY,endX,startY,canvas)
+                canvas?.rotate(-120f,mCenter.x,mCenter.y)
             }
         }
         canvas?.restore()

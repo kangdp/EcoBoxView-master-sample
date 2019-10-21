@@ -9,13 +9,13 @@
 
     <com.kdp.ecoboxview.EcoBoxView
         android:id="@+id/ecoBoxView"
-        android:layout_width="400dp"
+        android:layout_width="match_parent"
         android:layout_height="400dp"
         app:bgCircleColor="#F3F3F3"
         app:bgCircleStrokeColor="#DDDDDD"
         app:bgCircleStrokeWidth="1dp"
         app:arcColor="#0BD9B6"
-        app:arcGapColor="#C4EDE6"
+        app:arcGapColor="#300000FF"
         app:equalLineWidth="2dp"
         />
 
