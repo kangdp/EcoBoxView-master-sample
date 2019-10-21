@@ -8,7 +8,6 @@ import android.view.View
 import kotlin.math.min
 import android.view.animation.LinearInterpolator
 
-
 class EcoBoxView : View{
     private val AREA_NUMBER = 3
     private val BOX_SIZE_SCALE = 0.5//罗盘宽高占比
@@ -78,33 +77,43 @@ class EcoBoxView : View{
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         mCenter = PointF(w.div(2f),h.div(2f))
-        mCircleGap = mBoxSize.div(2f).minus(mHoleSize.div(2f)).minus(mBgCircleStrokeWidth.times(11)).div(10)
+        mCircleGap = mBoxSize.div(2f).minus(mHoleSize.div(2f)).minus(mBgCircleStrokeWidth.times(10)).minus(mEqualLineWidth).div(10)
         mRect = RectF()
     }
 
     private fun initPaint() {
         mBgCirclePaint = Paint().apply {
+            isAntiAlias = false
+            isDither = false
             style = Paint.Style.FILL
             color = mBgCircleColor
         }
 
         mHolePaint = Paint().apply {
+            isAntiAlias = false
+            isDither = false
             style = Paint.Style.FILL
             color = Color.WHITE
         }
 
         mBgCircleGapPaint = Paint().apply {
+            isAntiAlias = false
+            isDither = false
             style = Paint.Style.STROKE
             color = mBgCircleStrokeColor
             strokeWidth = mBgCircleStrokeWidth.times(2)
         }
         mEqualLinePaint = Paint().apply {
+            isAntiAlias = false
+            isDither = false
             style = Paint.Style.STROKE
             color = mBgCircleStrokeColor
             strokeWidth = mEqualLineWidth.times(2)
         }
 
         mArcPaint = Paint().apply {
+            isAntiAlias = false
+            isDither = false
             style = Paint.Style.STROKE
             strokeWidth = mBgCircleStrokeWidth.times(2)
             color = mArcColor
@@ -112,10 +121,14 @@ class EcoBoxView : View{
 
 
         mRingPaint = Paint().apply {
+            isAntiAlias = false
+            isDither = false
             style = Paint.Style.STROKE
             color = mArcGapColor
         }
         mArcGapPaint = Paint().apply {
+            isAntiAlias = false
+            isDither = false
             style = Paint.Style.STROKE
             strokeWidth = mEqualLineWidth.times(2)
             color = mArcColor
@@ -139,8 +152,17 @@ class EcoBoxView : View{
             canvas?.rotate(if (i== 0) 90f else 120f,mCenter.x,mCenter.y)
             val part = data[i]
             val size  = part.percent.times(10).toInt()
+            val gapScale = part.percent.times(10)-size
+            //绘制透明圆弧
+            mRingPaint.strokeWidth = mCircleGap.plus(mBgCircleStrokeWidth).times(size).plus(mCircleGap.times(gapScale))
+            left = mBoxSize.div(2).minus(mHoleSize.div(2)).minus(mRingPaint.strokeWidth.div(2))
+            top = left
+            right = mBoxSize.div(2).plus(mHoleSize.div(2)).plus(mRingPaint.strokeWidth.div(2))
+            bottom = right
+            mRect.set(left, top, right, bottom)
+            drawArc(canvas,mRingPaint)
+            //绘制part
             for (j in 0 until size.plus(1)){
-                val gapScale = part.percent.times(10)-size
                 mArcPaint.strokeWidth = mBgCircleStrokeWidth.times(2)
                 left =  mBoxSize.div(2).minus(mHoleSize.div(2)).minus(j.times(mCircleGap.plus(mBgCircleStrokeWidth)))
                 top = left
@@ -149,37 +171,23 @@ class EcoBoxView : View{
                 mRect.set(left, top, right, bottom)
                 if (j == size){
                     mArcPaint.strokeWidth = mEqualLineWidth.times(2)
-                    left = mRect.left.minus(mBgCircleStrokeWidth).minus(mCircleGap.times(gapScale).minus(mEqualLineWidth))
+                    left = mRect.left.minus(mCircleGap.times(gapScale))
                     top = left
-                    right =  mRect.right.plus(mBgCircleStrokeWidth).plus(mCircleGap.times(gapScale).minus(mEqualLineWidth))
+                    right =  mRect.right.plus(mCircleGap.times(gapScale))
                     bottom = right
                 }
                 mRect.set(left, top, right, bottom)
                 drawArc(canvas,mArcPaint)
-                //绘制透明圆环
-//                if (j == 0 && j == size){
-//                    mRingPaint.strokeWidth = mCircleGap.times(gapScale)
-//                }else {
-//                    mRingPaint.strokeWidth = mCircleGap
-//                }
-
-//                mRingPaint.strokeWidth = mCircleGap
-//
-//                left = mBoxSize.div(2).minus(mHoleSize.div(2)).minus(j.times(mCircleGap.plus(mBgCircleStrokeWidth))).minus(mRingPaint.strokeWidth.div(2))
-//                top = left
-//                right = mBoxSize.div(2).plus(mHoleSize.div(2)).plus(j.times(mCircleGap.plus(mBgCircleStrokeWidth))).plus(mRingPaint.strokeWidth.div(2))
-//                bottom = right
-//                mRect.set(left, top, right, bottom)
-//                drawArc(canvas,mRingPaint)
                 //绘制间隙
                 val startX = mBoxSize.div(2).plus(mHoleSize.div(2f))
                 val startY =  mBoxSize.div(2)
-                val endX = startX.plus(mBgCircleStrokeWidth.plus(mCircleGap).times(j)).plus(mBgCircleStrokeWidth).plus(mEqualLineWidth)
+                val endX = startX.plus(mBgCircleStrokeWidth.plus(mCircleGap).times(j)).plus(mBgCircleStrokeWidth).plus(mEqualLineWidth.div(2)).plus(mCircleGap.times(gapScale))
                 drawArcGap(startX,startY,endX,startY,canvas)
                 canvas?.rotate(120f,mCenter.x,mCenter.y)
                 drawArcGap(startX,startY,endX,startY,canvas)
                 canvas?.rotate(-120f,mCenter.x,mCenter.y)
             }
+
         }
         canvas?.restore()
     }
