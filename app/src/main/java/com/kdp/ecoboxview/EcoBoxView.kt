@@ -3,6 +3,7 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.View
 import kotlin.math.min
 import android.view.animation.LinearInterpolator
@@ -55,6 +56,7 @@ class EcoBoxView : View{
                 recycle()
             }
 
+        setLayerType(LAYER_TYPE_SOFTWARE,null)
         initPaint()
     }
 
@@ -76,7 +78,7 @@ class EcoBoxView : View{
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         mCenter = PointF(w.div(2f),h.div(2f))
-        mCircleGap = (mBoxSize.div(2f).minus(mHoleSize.div(2f)).minus(mBgCircleStrokeWidth.times(11))).div(10)
+        mCircleGap = mBoxSize.div(2f).minus(mHoleSize.div(2f)).minus(mBgCircleStrokeWidth.times(11)).div(10)
         mRect = RectF()
     }
 
@@ -143,7 +145,8 @@ class EcoBoxView : View{
                     mBoxSize.div(2).plus(mHoleSize.div(2)).plus(j.times(mCircleGap.plus(mBgCircleStrokeWidth))))
                 drawArc(canvas,mArcPaint)
                 if (j == size){
-                    mArcPaint.strokeWidth = gapScale.times(mCircleGap).times(2)
+//                    mArcPaint.strokeWidth = gapScale.times(mCircleGap).times(2)
+                    mArcPaint.strokeWidth = mEqualLineWidth.times(2)
                     mRect.left-=mBgCircleStrokeWidth
                     mRect.top-=mBgCircleStrokeWidth
                     mRect.right+=mBgCircleStrokeWidth
@@ -153,7 +156,7 @@ class EcoBoxView : View{
                     //绘制间隙
                     val startX = mBoxSize.div(2).plus(mHoleSize.div(2f))
                     val startY =  mBoxSize.div(2)
-                    val endX = startX.plus((mBgCircleStrokeWidth.plus(mCircleGap)).times(j)).plus(mBgCircleStrokeWidth).plus(gapScale.times(mCircleGap))
+                    val endX = startX.plus(mBgCircleStrokeWidth.plus(mCircleGap).times(j)).plus(mBgCircleStrokeWidth).plus(mEqualLineWidth)
                     drawArcGap(startX,startY,endX,startY,canvas)
                     canvas?.rotate(120f,mCenter.x,mCenter.y)
                     drawArcGap(startX,startY,endX,startY,canvas)
@@ -180,7 +183,10 @@ class EcoBoxView : View{
     private fun drawBackground(canvas: Canvas?) {
         //背景圆
         canvas?.drawCircle(mCenter.x,mCenter.y,mBoxSize.div(2f),mBgCirclePaint)
+
         //中心圆
+        mHolePaint.setShadowLayer(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,1f,resources.displayMetrics),0f,0f,0x20000000)
+        mHolePaint.maskFilter = BlurMaskFilter(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,10f,resources.displayMetrics),BlurMaskFilter.Blur.INNER)
         canvas?.drawCircle(mCenter.x,mCenter.y,mHoleSize.div(2f),mHolePaint)
         //各部分区域间隔线
         canvas?.save()
@@ -224,6 +230,7 @@ class EcoBoxView : View{
             start()
         }
     }
+
 
     private fun getScreenWidth() = resources.displayMetrics.widthPixels
     private fun getScreenHeight() = resources.displayMetrics.heightPixels
