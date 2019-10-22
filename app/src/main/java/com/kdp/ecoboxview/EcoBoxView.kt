@@ -23,7 +23,6 @@ class EcoBoxView : View{
     private var mHoleSize = 0f //中心圆的宽高
     private lateinit var mCenter: PointF //中心点
     private lateinit var mRect: RectF
-
     private lateinit var data:MutableList<Part>
 
 
@@ -83,37 +82,30 @@ class EcoBoxView : View{
 
     private fun initPaint() {
         mBgCirclePaint = Paint().apply {
-            isAntiAlias = false
-            isDither = false
             style = Paint.Style.FILL
             color = mBgCircleColor
         }
 
         mHolePaint = Paint().apply {
-            isAntiAlias = false
-            isDither = false
             style = Paint.Style.FILL
             color = Color.WHITE
         }
 
         mBgCircleGapPaint = Paint().apply {
-            isAntiAlias = false
-            isDither = false
+            isAntiAlias = true
             style = Paint.Style.STROKE
             color = mBgCircleStrokeColor
             strokeWidth = mBgCircleStrokeWidth.times(2)
         }
         mEqualLinePaint = Paint().apply {
-            isAntiAlias = false
-            isDither = false
+            isAntiAlias = true
             style = Paint.Style.STROKE
             color = mBgCircleStrokeColor
             strokeWidth = mEqualLineWidth.times(2)
         }
 
         mArcPaint = Paint().apply {
-            isAntiAlias = false
-            isDither = false
+            isAntiAlias = true
             style = Paint.Style.STROKE
             strokeWidth = mBgCircleStrokeWidth.times(2)
             color = mArcColor
@@ -121,14 +113,12 @@ class EcoBoxView : View{
 
 
         mRingPaint = Paint().apply {
-            isAntiAlias = false
-            isDither = false
+            isAntiAlias = true
             style = Paint.Style.STROKE
             color = mArcGapColor
         }
         mArcGapPaint = Paint().apply {
-            isAntiAlias = false
-            isDither = false
+            isAntiAlias = true
             style = Paint.Style.STROKE
             strokeWidth = mEqualLineWidth.times(2)
             color = mArcColor
