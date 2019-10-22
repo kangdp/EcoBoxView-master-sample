@@ -82,11 +82,13 @@ class EcoBoxView : View{
 
     private fun initPaint() {
         mBgCirclePaint = Paint().apply {
+            isAntiAlias = true
             style = Paint.Style.FILL
             color = mBgCircleColor
         }
 
         mHolePaint = Paint().apply {
+            isAntiAlias = true
             style = Paint.Style.FILL
             color = Color.WHITE
         }
