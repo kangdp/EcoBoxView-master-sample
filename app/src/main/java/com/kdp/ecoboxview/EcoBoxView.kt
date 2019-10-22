@@ -170,7 +170,7 @@ class EcoBoxView : View{
                 }
                 mRect.set(left, top, right, bottom)
                 drawArc(canvas,mArcPaint)
-                //绘制间隙
+                //绘制平分线
                 val startX = mBoxSize.div(2).plus(mHoleSize.div(2f))
                 val startY =  mBoxSize.div(2)
                 val endX = startX.plus(mBgCircleStrokeWidth.plus(mCircleGap).times(j)).plus(mBgCircleStrokeWidth).plus(mEqualLineWidth.div(2)).plus(mCircleGap.times(gapScale))
@@ -201,7 +201,6 @@ class EcoBoxView : View{
     private fun drawBackground(canvas: Canvas?) {
         //背景圆
         canvas?.drawCircle(mCenter.x,mCenter.y,mBoxSize.div(2f),mBgCirclePaint)
-
         //中心圆
         mHolePaint.setShadowLayer(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,1f,resources.displayMetrics),0f,0f,0x20000000)
         mHolePaint.maskFilter = BlurMaskFilter(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,10f,resources.displayMetrics),BlurMaskFilter.Blur.INNER)
