@@ -10,9 +10,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        data.add(Part("A",0.3f))
-        data.add(Part("B",0.6f))
-        data.add(Part("C",0.95f))
+        data.add(Part("A",0.4f))
+        data.add(Part("B",0.83f))
+        data.add(Part("C",0.7f))
         ecoBoxView.setData(data)
         ecoBoxView.invalidateAnimate(3000)
     }
