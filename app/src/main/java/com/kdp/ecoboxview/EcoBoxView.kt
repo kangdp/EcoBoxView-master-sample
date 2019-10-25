@@ -35,6 +35,7 @@ class EcoBoxView : View{
     private var mArcGapColor: Int = 0xFFC4EDE6.toInt() //圆弧间隙颜色
 
     private var mCircleGap = 0f//圆与圆之间的间隙
+    private lateinit var blurMaskFilter : BlurMaskFilter
 
     constructor(context: Context?) : this(context,null)
     constructor(context: Context?, attrs: AttributeSet?) : this(context, attrs,0)
@@ -53,9 +54,7 @@ class EcoBoxView : View{
                 mArcGapColor = getColor(R.styleable.EcoBoxView_arcGapColor,mArcGapColor)
                 recycle()
             }
-
-        setLayerType(LAYER_TYPE_SOFTWARE,null)
-        initPaint()
+        init()
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -80,7 +79,9 @@ class EcoBoxView : View{
         mRect = RectF()
     }
 
-    private fun initPaint() {
+    private fun init() {
+
+        setLayerType(LAYER_TYPE_SOFTWARE,null)
         mBgCirclePaint = Paint().apply {
             isAntiAlias = true
             style = Paint.Style.FILL
@@ -125,6 +126,8 @@ class EcoBoxView : View{
             strokeWidth = mEqualLineWidth.times(2)
             color = mArcColor
         }
+
+       blurMaskFilter = BlurMaskFilter(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,10f,resources.displayMetrics),BlurMaskFilter.Blur.INNER)
 
     }
 
@@ -202,8 +205,10 @@ class EcoBoxView : View{
         //背景圆
         canvas?.drawCircle(mCenter.x,mCenter.y,mBoxSize.div(2f),mBgCirclePaint)
         //中心圆
-        mHolePaint.setShadowLayer(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,1f,resources.displayMetrics),0f,0f,0x20000000)
-        mHolePaint.maskFilter = BlurMaskFilter(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,10f,resources.displayMetrics),BlurMaskFilter.Blur.INNER)
+        mHolePaint.apply {
+            setShadowLayer(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,1f,resources.displayMetrics),0f,0f,0x20000000)
+            maskFilter = blurMaskFilter
+        }
         canvas?.drawCircle(mCenter.x,mCenter.y,mHoleSize.div(2f),mHolePaint)
         //各部分区域间隔线
         canvas?.save()
